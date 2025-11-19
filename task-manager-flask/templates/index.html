@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Todo List{% endblock %}
+
+{% block content %}
+<div class="main-container">
+
+    <div class="tasks">
+        <h2>Your Tasks</h2>
+        <input type="text" id="search" placeholder="Search tasks">
+        <ul id="task-list">
+            {% if tasks|length == 0 %}
+                <li>No tasks available</li>
+            {% else %}
+                {% for task in tasks %}
+                    <li>
+                        <span class="{% if task.done %}task-done{% endif %}">
+                            {{ task.id }} - {{ task.title }}
+                        </span>
+                        
+                        {% if not task.done %}
+                            <a href="{{ url_for('mark_done', task_id=task.id) }}" class="done-btn">Done</a>
+                        {% endif %}
+                        <a href="{{ url_for('delete_task', task_id=task.id) }}" class="delete-btn">Delete</a>
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="task-form">
+        <h2>Add a New Task</h2>
+        <form method="POST" action="{{ url_for('add_task') }}">
+            <input type="text" name="task" placeholder="Enter a task">
+            <button type="submit">Add Task</button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}
